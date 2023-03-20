@@ -36,7 +36,7 @@ async function run(): Promise<void> {
   const isValid = regex.test(message)
   if (!isValid) {
     core.setFailed(
-      `Commit Message: "\n${message}\n" does not contain the valid Jira Issue code for this Branch "${jiraIssue}".`,
+      `Commit Message: "\n${message}\n" does *not* contain the valid Jira Issue code for this Branch "${jiraIssue}".`,
     )
   } else {
 	core.info("Commit message is OK 😉🎉");
