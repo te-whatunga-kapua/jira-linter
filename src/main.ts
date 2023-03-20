@@ -1,19 +1,23 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as github from '@actions/github'
 
-async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+function run() {
+  const branch = github.context.payload.ref.split('/')[2]
+  const jiraIssue = `${branch.split('-')[0]}-${branch.split('-')[1]}`
+  const regex = new RegExp(`${jiraIssue}:`)
+  const title = 
+    github.context.payload &&
+    github.context.payload.pull_request &&
+    github.context.payload.pull_request.title
+  core.info(title)
+  const isValid = regex.test(title)
+  if (!isValid) {
+    core.setFailed(
+      `Pull request title: "\n${title}\n" does not contain the valid Jira Issue code for this Branch "${jiraIssue}".`,
+    )
   }
 }
 
 run()
+
+
