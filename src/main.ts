@@ -38,7 +38,10 @@ async function run(): Promise<void> {
     core.setFailed(
       `Commit Message: "\n${message}\n" does not contain the valid Jira Issue code for this Branch "${jiraIssue}".`,
     )
+  } else {
+	core.info("Commit message is OK 😉🎉");
   }
+  
 }
 
 
