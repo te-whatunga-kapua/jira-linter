@@ -67,7 +67,10 @@ function run() {
         core.debug(`Commit Message Found:\n${message}`);
         const isValid = regex.test(message);
         if (!isValid) {
-            core.setFailed(`Commit Message: "\n${message}\n" does not contain the valid Jira Issue code for this Branch "${jiraIssue}".`);
+            core.setFailed(`Commit Message: "\n${message}\n" does *not* contain the valid Jira Issue code for this Branch "${jiraIssue}".`);
+        }
+        else {
+            core.info("Commit message is OK 😉🎉");
         }
     });
 }
